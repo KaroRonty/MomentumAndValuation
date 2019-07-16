@@ -75,8 +75,8 @@ valuation <- combined %>%
   gather("Country", "Valuation", -Date)
 
 # Plot all countries ----
-all_countries <- inner_join(momentum %>% filter(Date == "2019-04-30"),
-                            valuation %>% filter(Date == "2019-04-30"))
+all_countries <- inner_join(momentum %>% filter(Date == "2019-06-30"),
+                            valuation %>% filter(Date == "2019-06-30"))
 
 ggplot(all_countries, aes(x = Valuation, y = Momentum,
                           color = Country, label = Country)) +
@@ -84,17 +84,18 @@ ggplot(all_countries, aes(x = Valuation, y = Momentum,
   geom_point(color = "black", stroke = 1, shape = 21, fill = "white") +
   geom_text_repel(show.legend = FALSE) +
   ggtitle("Valuation (CAPE) vs momentum (1-year return) of different countries") +
-  labs(subtitle = "2019/04/30",
-       caption = "Source: shiller.barclays.com/SM/12/en/indices/static/historic-ratios.app \n
+  labs(subtitle = "2019/06/30",
+       caption =
+       "Source: shiller.barclays.com/SM/12/en/indices/static/historic-ratios.app \n
 Blog post at: databasedinvesting.blogspot.com") +
   theme(plot.caption = element_text(hjust = 0, lineheight = 0.5))
 
 # Plot selected countries ----
 selected_countries <- inner_join(valuation, momentum) %>% 
-  filter(Date %in% as.Date(c("2019-04-30", "2018-04-30", "2017-04-28",
-                             "2016-04-28", "2015-04-30", "2014-04-30",
-                             "2013-04-30", "2012-04-27")),
-                            Country %in%c("Israel", "Turkey", "Russia", "USA"))
+  filter(Date %in% as.Date(c("2019-06-30", "2018-06-30", "2017-06-30",
+                             "2016-06-30", "2015-06-30", "2014-06-30",
+                             "2013-06-28", "2012-06-29")),
+                            Country %in% c("Israel", "Turkey", "Russia", "USA"))
 
 ggplot(selected_countries, aes(x = Valuation, y = Momentum,
                                color = Country, group = Country,
@@ -102,27 +103,29 @@ ggplot(selected_countries, aes(x = Valuation, y = Momentum,
   geom_path(show.legend = FALSE, size = 1) +
   geom_point(color = "black", stroke = 1, shape = 21, fill = "white") +
   geom_text_repel(show.legend = FALSE,
-                  data = selected_countries %>% filter(Date == "2019-04-30")) +
+                  data = selected_countries %>% filter(Date == "2019-06-30")) +
   ggtitle("Valuation (CAPE) vs momentum (1-year return) paths of selected countries") +
-  labs(subtitle = "2012/04/27 - 2019/04/30, yearly",
-       caption = "Source: shiller.barclays.com/SM/12/en/indices/static/historic-ratios.app \n
+  labs(subtitle = "2012/06/30 - 2019/06/30, yearly",
+       caption =
+       "Source: shiller.barclays.com/SM/12/en/indices/static/historic-ratios.app \n
 Blog post at: databasedinvesting.blogspot.com") +
   theme(plot.caption = element_text(hjust = 0, lineheight = 0.5))
 
 # Plot just USA ----
 just_usa <- inner_join(valuation, momentum) %>% 
            filter(Country == "USA") %>% 
-           filter(Date >= "2012-04-27")
+           filter(Date >= "2012-06-29")
 
 ggplot(just_usa, aes(x = Valuation, y = Momentum,
                     color = Date, label = Country)) +
   geom_path(show.legend = FALSE, size = 1) +
   geom_text_repel(show.legend = FALSE,
-                  data = just_usa %>% filter(Date == "2019-04-30"),
+                  data = just_usa %>% filter(Date == "2019-06-30"),
                   force = TRUE) +
   geom_point(color = "black", stroke = 1, shape = 21, fill = "white") +
   ggtitle("Valuation (CAPE) vs momentum (1-year return) path of S&P 500") +
-  labs(subtitle = "2012/04/27 - 2019/04/30, monthly",
-       caption = "Source: shiller.barclays.com/SM/12/en/indices/static/historic-ratios.app \n
+  labs(subtitle = "2012/06/30 - 2019/06/30, monthly",
+       caption =
+       "Source: shiller.barclays.com/SM/12/en/indices/static/historic-ratios.app \n
 Blog post at: databasedinvesting.blogspot.com") +
   theme(plot.caption = element_text(hjust = 0, lineheight = 0.5))
