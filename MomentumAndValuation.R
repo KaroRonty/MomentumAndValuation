@@ -8,7 +8,6 @@ library(data.table)
 
 # Read historical CAPE data from Barclay's
 capedata <- read.csv("historical_capes.csv",
-                     fileEncoding = "UTF-8-BOM",
                      check.names = FALSE)
 
 # Replace zeros with NAs and format
@@ -58,7 +57,7 @@ data <- data %>%
   filter(Date == max(Date)) %>% 
   ungroup() %>% 
   select(-`strftime(Date, "%Y-%m")`) %>% 
-  mutate_if(is.numeric, ~lag(lead(., 12) / ., 12)) %>% 
+  mutate_if(is.numeric, ~lag(lead(., 6) / ., 6)) %>% 
   select(Date, noquote(order(colnames(.)))) %>% 
   as.data.table()
 
@@ -83,7 +82,7 @@ ggplot(all_countries, aes(x = Valuation, y = Momentum,
   geom_point(show.legend = FALSE) +
   geom_point(color = "black", stroke = 1, shape = 21, fill = "white") +
   geom_text_repel(show.legend = FALSE) +
-  ggtitle("Valuation (CAPE) vs momentum (1-year return) of different countries") +
+  ggtitle("Valuation (CAPE) vs momentum (6-month return) of different countries") +
   labs(subtitle = "2019/06/30",
        caption =
        "Source: shiller.barclays.com/SM/12/en/indices/static/historic-ratios.app \n
@@ -104,7 +103,7 @@ ggplot(selected_countries, aes(x = Valuation, y = Momentum,
   geom_point(color = "black", stroke = 1, shape = 21, fill = "white") +
   geom_text_repel(show.legend = FALSE,
                   data = selected_countries %>% filter(Date == "2019-06-30")) +
-  ggtitle("Valuation (CAPE) vs momentum (1-year return) paths of selected countries") +
+  ggtitle("Valuation (CAPE) vs momentum (6-month return) paths of selected countries") +
   labs(subtitle = "2012/06/30 - 2019/06/30, yearly",
        caption =
        "Source: shiller.barclays.com/SM/12/en/indices/static/historic-ratios.app \n
@@ -123,7 +122,7 @@ ggplot(just_usa, aes(x = Valuation, y = Momentum,
                   data = just_usa %>% filter(Date == "2019-06-30"),
                   force = TRUE) +
   geom_point(color = "black", stroke = 1, shape = 21, fill = "white") +
-  ggtitle("Valuation (CAPE) vs momentum (1-year return) path of S&P 500") +
+  ggtitle("Valuation (CAPE) vs momentum (6-month return) path of S&P 500") +
   labs(subtitle = "2012/06/30 - 2019/06/30, monthly",
        caption =
        "Source: shiller.barclays.com/SM/12/en/indices/static/historic-ratios.app \n
